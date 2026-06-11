@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+  reporter : [
+    ['list'],
+    ['allure-playwright']
+  ],
   testDir: './tests',
   timeout: 30000,
   retries: 0,
