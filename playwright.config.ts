@@ -13,7 +13,7 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        headless: false, // run headed
+        headless: process.env.CI ? true : false, // run headed
         baseURL: process.env.BASE_URL ?? 'https://www.saucedemo.com/',
         launchOptions: {
           slowMo: 300, // ✅ put inside use
