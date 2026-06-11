@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Always store LF in Git
+* text=auto eol=lf
