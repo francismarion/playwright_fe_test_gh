@@ -5,4 +5,5 @@ dotenv.config(); // load .env file
 // Export the variables
 export const USERNAME = process.env.TEST_USERNAME ?? '';
 export const PASSWORD = process.env.TEST_PASSWORD ?? '';
+export const LOCKED_USERNAME = process.env.LOCKED_USER ?? '';
 export const API_BASE_URL = process.env.API_BASE_URL ?? '';
