@@ -46,4 +46,29 @@ export class ProductPage {
     }
     await expect(this.page.locator('.cart_item')).toHaveCount(expectedItems.length);
   }
+
+async allItemsNotSelected() {
+  const items = this.page.locator('.inventory_item');
+  const count = await items.count();
+  const notChanged: string[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const itemCard = items.nth(i);
+    const button = itemCard.locator('button');
+    const text = (await button.innerText()).trim();
+
+    if (text === 'Add to cart') {
+      const productName = await itemCard.locator('.inventory_item_name').innerText();
+      notChanged.push(productName.trim());
+    }
+  }
+
+  if (notChanged.length > 0) {
+    throw new Error(`These items did not switch to "Remove": ${notChanged.join(', ')}`);
+  }
+}
+
+
+
+
 }

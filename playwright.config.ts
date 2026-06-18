@@ -6,7 +6,10 @@ export default defineConfig({
     ['allure-playwright']
   ],
   testDir: './tests',
-  timeout: 30000,
+  timeout: 9000,
+  expect: {
+    timeout: 1000
+  },
   retries: 0,
   projects: [
     {

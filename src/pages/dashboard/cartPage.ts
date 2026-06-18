@@ -73,6 +73,10 @@ export class CartPage {
     await this.firstNameField.fill(first);
     await this.lastNameField.fill(last);
     await this.postalCodeField.fill(postal);
+
+    // await expect(this.page.locator('[data-test="firstName"]')).toHaveValue(first);
+    // await expect(this.page.locator('[data-test="lastName"]')).toHaveValue(last);
+    // await expect(this.page.locator('[data-test="postalCode"]')).toHaveValue(postal);
   }
 
   async assertCartTotals() {
@@ -91,4 +95,12 @@ export class CartPage {
     expect(sum).toBeCloseTo(displayedSubtotal, 2);
     expect(displayedTotal).toBeGreaterThanOrEqual(displayedSubtotal);
   }
+
+  async assertFieldRequiredErrorMessage(errorMessage: string) {
+    const error = this.page.locator('[data-test=error]')
+    await expect(error).toBeVisible();
+    await expect(error).toHaveText(errorMessage)
+  }
+
+
 }
