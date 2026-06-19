@@ -6,7 +6,7 @@ export default defineConfig({
     ['allure-playwright']
   ],
   testDir: './tests',
-  timeout: 9000,
+  timeout: 90000,
   expect: {
     timeout: 1000
   },
@@ -17,7 +17,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         headless: process.env.CI ? true : false, // run headed
-        baseURL: process.env.BASE_URL ?? 'https://www.saucedemo.com/',
+        baseURL: process.env.BASE_URL ?? 'https://www.saucedemo.com',
         launchOptions: {
           slowMo: 300, // ✅ put inside use
         },

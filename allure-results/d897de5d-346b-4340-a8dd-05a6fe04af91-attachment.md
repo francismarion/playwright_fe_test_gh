@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: auth\login.spec.ts >> login with glitched credentials
-- Location: tests\auth\login.spec.ts:33:5
+- Name: saucedemo-login.spec.ts >> Sauce Demo Login >> Negative login with invalid username
+- Location: tests\saucedemo-login.spec.ts:36:7
 
 # Error details
 
