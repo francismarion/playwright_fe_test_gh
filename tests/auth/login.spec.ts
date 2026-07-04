@@ -30,7 +30,23 @@ import { USERNAME, PASSWORD, LOCKED_USERNAME, ERROR_USERNAME } from '../../src/u
 //   await homepage.allItemsNotSelected();
 
 // })
-test('login with glitched credentials', async ({ page }) => {
+// test('login with glitched credentials', async ({ page }) => {
+//   const login = new LoginPage(page);
+//   await login.goto('/');
+//   await login.login(LOCKED_USERNAME, PASSWORD);
+//   await login.lockedUserLogged();
+
+// });
+
+test('login with glitched credentials with 3g network', async ({ page }) => {
+  const client = await page.context().newCDPSession(page);
+  await client.send('Network.emulateNetworkConditions', {
+    offline: false,
+    downloadThroughput: 6400,
+    uploadThroughput: 3200,
+    latency: 500000
+
+  })
   const login = new LoginPage(page);
   await login.goto('/');
   await login.login(LOCKED_USERNAME, PASSWORD);
