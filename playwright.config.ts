@@ -1,10 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  reporter : [
-    ['list'],
-    ['allure-playwright']
-  ],
+  reporter: [
+  ['line'],
+  ['allure-playwright', { 
+    outputFolder: process.env.ALLURE_RESULTS_DIR || 'allure-results' 
+  }]
+],
   testDir: './tests',
   timeout: 90000,
   expect: {
@@ -16,10 +18,10 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        headless: process.env.CI ? true : false, // run headed
+        headless: process.env.CI === 'true' || process.env.PLAYWRIGHT_HEADLESS === 'true',
         baseURL: process.env.BASE_URL ?? 'https://www.saucedemo.com',
         launchOptions: {
-          slowMo: 300, // ✅ put inside use
+          slowMo: 300,
         },
       },
     },

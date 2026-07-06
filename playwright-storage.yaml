@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: allure-shared-pvc
+spec:
+  accessModes:
+    - ReadWriteMany # Allows multiple shards to write at the same time
+  resources:
+    requests:
+      storage: 1Gi

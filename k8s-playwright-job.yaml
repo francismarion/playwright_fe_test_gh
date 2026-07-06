@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: playwright-shard-${SHARD_NUMBER}  # 👈 MAKE SURE THIS HAS THE ${SHARD_NUMBER} VARIABLE
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: playwright-shard-${SHARD_NUMBER}  # 👈 MAKE SURE THIS HAS IT TOO
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: playwright
+        image: playwright-local:latest
+        imagePullPolicy: Never
+        command: ["/bin/sh", "-c"]
+        args: 
+        - |
+          echo "=== 1. CURRENT WORKING DIRECTORY ==="
+          pwd
+          echo "=== 2. LISTING ALL FILES IN WORKDIR ==="
+          ls -la
+          echo "=== 3. CHECKING ALLURE STORAGE MOUNT ==="
+          ls -la /shared-results
+          echo "=== 4. EVALUATED ARGUMENTS ==="
+          echo "Shard number is: ${SHARD_NUMBER}"
+          echo "Total shards is: ${TOTAL_SHARDS}"
+          echo "======================================"
+          mkdir -p /shared-results/allure-results-shard-${SHARD_NUMBER}
+          export ALLURE_RESULTS_DIR=/shared-results/allure-results-shard-${SHARD_NUMBER}
+          npx playwright test --reporter=line,allure-playwright --shard=${SHARD_NUMBER}/${TOTAL_SHARDS}
+          if [ -d /app/allure-results ]; then
+            cp -R /app/allure-results/. /shared-results/allure-results-shard-${SHARD_NUMBER}/
+          fi
+          echo "=== 5. ALLURE OUTPUT CHECK ==="
+          find /shared-results/allure-results-shard-${SHARD_NUMBER} -maxdepth 2 -type f 2>/dev/null | head -20
+        env:
+        - name: SHARD_NUMBER
+          value: "${SHARD_NUMBER}"  # 👈 AND HERE
+        - name: TOTAL_SHARDS
+          value: "${TOTAL_SHARDS}"
+        - name: CI
+          value: "true"
+        - name: PLAYWRIGHT_HEADLESS
+          value: "true"
+        - name: ALLURE_RESULTS_DIR
+          value: "/shared-results/allure-results-shard-${SHARD_NUMBER}"  # 👈 AND HERE
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /shared-results
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: allure-shared-pvc
